@@ -133,4 +133,4 @@ def get_topic(text: str) -> str:
 
 
 if __name__ == "__main__":
-    categorize()
+    categorize_all()
