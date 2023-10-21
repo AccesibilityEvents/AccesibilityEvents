@@ -1,10 +1,10 @@
 from selenium import webdriver
-from uuid import uuid4
 from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
+import accessibility_events.utils as utils
 import accessibility_events.database as db
 
 chrome_options = Options()
@@ -13,8 +13,6 @@ browser = webdriver.Chrome(chrome_options)
 
 
 def main():
-    db.EMailContent.delete().execute()
-
     browser.get("https://www.zuerichunbezahlbar.ch/events/")
 
     for _ in range(7):
@@ -30,7 +28,11 @@ def main():
             link = get_element(By.CSS_SELECTOR, "a.detailpost__link").get_attribute("href")
 
             print(title)
-            db.EMailContent.create(subject=uuid4(),
+
+            content_hash = utils.get_hash_string(title + time)
+            if db.EMailContent.select().where(db.EMailContent.subject == content_hash).exists():
+                continue
+            db.EMailContent.create(subject=content_hash,
                                    content=f"title: {title}\ntime: {time}\n info: {info}\naddress: {address}\ndescription: {description}\nlink: {link}")
 
             get_element(By.CSS_SELECTOR, ".close-reveal-modal").click()

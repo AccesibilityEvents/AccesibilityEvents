@@ -1,10 +1,10 @@
 from json import loads
-import hashlib
 from functools import lru_cache
 import openai
 from dotenv import load_dotenv
 from os import getenv
 
+import accessibility_events.utils as utils
 import accessibility_events.database as db
 
 load_dotenv()
@@ -20,7 +20,7 @@ def categorize_all():
 
 def categorize(text: str):
 
-    event_id = get_hash_string(text)
+    event_id = utils.get_hash_string(text)
     if db.Event.select().where(db.Event.id == event_id).exists():
         return
 
@@ -135,23 +135,6 @@ def get_topic(text: str) -> str:
         messages=messages,
     )
     return response["choices"][0]["message"]["content"]
-
-
-# Thank you ChatGPT!
-def get_hash_string(input_string):
-    # Create a new SHA-256 hash object
-    hash_object = hashlib.sha1()
-
-    # Convert the input string to bytes
-    input_bytes = input_string.encode('utf-8')
-
-    # Update the hash object with the input bytes
-    hash_object.update(input_bytes)
-
-    # Get the hexadecimal representation of the hash
-    hash_string = hash_object.hexdigest()
-
-    return hash_string
 
 
 if __name__ == "__main__":
