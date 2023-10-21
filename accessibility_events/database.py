@@ -28,7 +28,7 @@ class Location(BaseModel):
 
 
 class Event(BaseModel):
-    id = UUIDField(primary_key=True)
+    id = TextField(primary_key=True)
     title = TextField()
     description = TextField()
     link = TextField()
