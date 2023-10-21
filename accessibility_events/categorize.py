@@ -11,26 +11,29 @@ load_dotenv()
 openai.api_key = getenv("OPENAI_API_KEY")
 
 
-def categorize():
+def categorize_all():
     for email in db.EMailContent.select():
-        infos = loads(get_infos(email.subject + email.content))
-        tag = get_topic(email.subject + email.content)
-
+        categorize(email.subject + email.content)
         email.delete_instance()
 
-        db.Event.create(
-            id=uuid4(),
-            title=infos["title"],
-            description=infos["description"],
-            link=infos["link"],
-            price=infos["price"],
-            tags=tag,
-            start_date=infos["start_date"],
-            end_date=infos["end_date"],
-            age=infos["age"],
-            accessibility=infos["accessibility"],
-            location=None
-        )
+
+def categorize(text: str):
+    infos = loads(get_infos(text))
+    tag = get_topic(text)
+
+    db.Event.create(
+        id=uuid4(),
+        title=infos["title"],
+        description=infos["description"],
+        link=infos["link"],
+        price=infos["price"],
+        tags=tag,
+        start_date=infos["start_date"],
+        end_date=infos["end_date"],
+        age=infos["age"],
+        accessibility=infos["accessibility"],
+        location=None
+    )
 
 
 @lru_cache
