@@ -17,6 +17,7 @@ def categorize_all():
 
     db.EMailContent.delete().execute()
 
+
 def categorize(text: str):
     infos = loads(get_infos(text))
     tag = get_topic(text)
@@ -41,7 +42,9 @@ def get_infos(text: str) -> str:
     messages = [
         {
             "role": "system",
-            "content": """Task: Extract the following event information's from the given text. The output should be in the specifed form.
+            "content": """Task: Extract the following event information's from the given text.
+The output should be in the specifed form. Respond with "---" if you don't have enought information to fill a field.
+
 Required Information:
 - title
 - description
