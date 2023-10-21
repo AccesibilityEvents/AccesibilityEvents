@@ -14,8 +14,8 @@ openai.api_key = getenv("OPENAI_API_KEY")
 def categorize_all():
     for email in db.EMailContent.select():
         categorize(email.subject + email.content)
-        email.delete_instance()
 
+    db.EMailContent.delete().execute()
 
 def categorize(text: str):
     infos = loads(get_infos(text))
