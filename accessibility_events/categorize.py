@@ -19,7 +19,6 @@ def categorize_all():
 
 
 def categorize(text: str):
-
     event_id = utils.get_hash_string(text)
     if db.Event.select().where(db.Event.id == event_id).exists():
         return
@@ -27,19 +26,23 @@ def categorize(text: str):
     infos = loads(get_infos(text))
     tag = get_topic(text)
 
-    db.Event.create(
-        id=event_id,
-        title=infos["title"],
-        description=infos["description"],
-        link=infos["link"],
-        price=infos["price"],
-        tags=tag,
-        start_date=infos["start_date"],
-        end_date=infos["end_date"],
-        age=infos["age"],
-        accessibility=infos["accessibility"],
-        location=None
-    )
+    try:
+        db.Event.create(
+            id=event_id,
+            title=infos["title"],
+            description=infos["description"],
+            link=infos["link"],
+            price=infos["price"],
+            tags=tag,
+            start_date=infos["start_date"],
+            end_date=infos["end_date"],
+            age=infos["age"],
+            accessibility=infos["accessibility"],
+            address=infos["address"],
+            city=db.City.get(name=infos["city"]),
+        )
+    except KeyError:
+        return
 
 
 @lru_cache
@@ -56,7 +59,8 @@ Required Information:
 - description
 - link
 - price
-- location
+- address
+- city
 - start date
 - end date
 - age
@@ -68,7 +72,8 @@ Output as JSON:
     "description": "..."
     "link": "..."
     "price": "..."
-    "location": "..."
+    "address": "...",
+    "city": "...",
     "start_date": "..."
     "end_date": "..."
     "age": "..."
