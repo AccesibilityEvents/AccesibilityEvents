@@ -19,12 +19,12 @@ def categorize_all():
 
 
 def categorize(text: str):
-    infos = loads(get_infos(text))
 
-    event_id = get_hash_string(infos["title"] + infos["start_date"] + infos["end_date"])
+    event_id = get_hash_string(text)
     if db.Event.select().where(db.Event.id == event_id).exists():
         return
 
+    infos = loads(get_infos(text))
     tag = get_topic(text)
 
     db.Event.create(
