@@ -49,6 +49,7 @@ def get_infos(text: str) -> str:
             "role": "system",
             "content": """Task: Extract the following event information's from the given text.
 The output should be in the specifed form. Respond with "---" if you don't have enought information to fill a field.
+You are allowed to shorten the output if you think it is necessary or too long.
 
 Required Information:
 - title
