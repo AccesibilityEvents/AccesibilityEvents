@@ -1,29 +1,24 @@
-from flask import Flask, render_template, request, jsonify, Request
+from flask import Flask, render_template, request, jsonify
 from uuid import uuid4
 from accessibility_events.categorize import get_topic
 import accessibility_events.database as db
-from accessibility_events.backend import *
-
 
 app = Flask(__name__)
 
 
-database = databaseInteractions()
-
-@app.route('/', methods=["GET"])
+@app.route("/", methods=["GET"])
 def index():
     return render_template('startPage.html')
 
-@app.route('/api/events')
+
+@app.route("/api/events", methods=["GET"])
 def events():
-    return jsonify(database.getAllEvents())
+    return jsonify(list(db.Event.select().dicts()))
 
 
 @app.route("/filterseting", methods=["GET"])
 def filtersetting():
     return render_template('filterseting.html')
-
-
 
 
 # @app.route("/api/events/search")
@@ -32,7 +27,7 @@ def filtersetting():
 #     return "", 200
 
 
-@app.route('/api/events/search')
+@app.route("/api/events/search", methods=["GET"])
 def getEvents():
     category = request.args.get("kategorie")
     therm = request.args.get("search")
@@ -47,12 +42,13 @@ def getEvents():
     print(result)
     return render_template("startPage.html", events=events)
 
-@app.route('/api/emails')
+
+@app.route("/api/emails", methods=["GET"])
 def emails():
     return jsonify(list(db.EMailContent.select().dicts()))
 
 
-@app.route("/api/add_event")
+@app.route("/api/add_event", methods=["POST"])
 def add_event():
     # TODO: validation
     # location = request.args.get("location", "")
@@ -77,7 +73,6 @@ def add_event():
 
 def main():
     app.run(debug=True)
-
 
 
 if __name__ == '__main__':
