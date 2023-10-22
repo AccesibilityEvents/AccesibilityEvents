@@ -20,32 +20,29 @@
       <form action="api/events/search" method="get">
         <div class="grid">
           <div>
-            <label for="search">Suche</label>
-            <input id="search" type="search" placeholder="Suche" autofocus />
+            <label>Suche</label>
+            <input id="search" name="search" placeholder="Suche" autofocus/>
           </div>
-
+          <div class="grid">
+            <button type="submit">Suchen</button>
+          </div>
+      </form>
+      
           <div>
             <!-- Plus-Button, um zur anderen Seite zu gelangen -->
             <button type="button" onclick="window.location.href='/addWindow';">
               +
             </button>
           </div>
-
+      
           <div>
             <!-- Button, um zur Unterseite zu gelangen -->
-            <button
-              type="button"
-              onclick="window.location.href='/filterseting';"
-            >
+            <button type="button" onclick="window.location.href='/filterseting';">
               Filtereinstellungen
             </button>
           </div>
         </div>
-
-        <div class="grid">
-          <button type="submit">Suchen</button>
-        </div>
-      </form>
+      
 
       <h1 aria-busy="true"></h1>
 

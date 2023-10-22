@@ -16,12 +16,7 @@ def index():
 
 @app.route('/api/events')
 def events():
-
     return jsonify(database.getAllEvents())
-
-@app.route("/", methods=["GET"])
-def index():
-    return render_template('startPage.html')
 
 
 @app.route("/filterseting", methods=["GET"])
@@ -29,9 +24,6 @@ def filtersetting():
     return render_template('filterseting.html')
 
 
-@app.route('/api/events')
-def events():
-    return jsonify(list(db.Event.select().dicts()))
 
 
 # @app.route("/api/events/search")
@@ -47,16 +39,13 @@ def getEvents():
     location = request.args.get("ort")
     distance = request.args.get("distanz")
 
-    result = db.Event.select().where(
-        (db.Event.tags.contains(category)) & 
-        (db.Event.city.contains(location)) & 
-        (db.Event.title.contains(therm))).dicts()
-
-    return render_template("startPage.html", events=result)
-
-@app.route("/filter")
-def filter():
-    return render_template("filter.html")
+    result = list(db.Event.select().where(
+        #(db.Event.tags.contains(category)) & 
+        #(db.Event.city.contains(location)) & 
+        (db.Event.title.contains(therm))).dicts())
+    
+    print(result)
+    return render_template("startPage.html", events=events)
 
 @app.route('/api/emails')
 def emails():
@@ -87,7 +76,7 @@ def add_event():
 
 
 def main():
-    app.run(host="0.0.0.0", port=5000, debug=True)
+    app.run(debug=True)
 
 
 
